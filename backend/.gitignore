@@ -5,9 +5,9 @@ node_modules
 .vscode
 #other files
 snapshot
-public
 dist
 # Environment variables, never commit this file
 .env
 snapshots
 dist
+sh.cmd
