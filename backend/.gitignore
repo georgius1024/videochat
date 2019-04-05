@@ -1,0 +1,13 @@
+# Node modules
+node_modules
+#editor files
+.idea
+.vscode
+#other files
+snapshot
+public
+dist
+# Environment variables, never commit this file
+.env
+snapshots
+dist

@@ -1,0 +1,16 @@
+.participants {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.participants > * {
+  margin: 12px 12px 0 0;
+  filter: drop-shadow(4px 4px 6px #000);
+}
+
+@media screen and (max-width: 768px) {
+  .participants > * {
+    margin: 12px auto;
+  }
+}
