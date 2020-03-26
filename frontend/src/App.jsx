@@ -29,7 +29,7 @@ class App extends Component {
       errorMessage: '',
       genericMessage: ''
     }
-    const BACKEND_URL = process.env.NODE_ENV === 'production' ? window.location.host : '192.168.1.40:5781'
+    const BACKEND_URL = process.env.NODE_ENV === 'production' ? window.location.host : '127.0.0.1:5781'
     this.socket = new ObservableSocket(`wss://${BACKEND_URL}/${ROOM_ID}`, false)
 
     this.socket.reconnect = true
