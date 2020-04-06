@@ -4,10 +4,17 @@ $height: 240px;
 %box {
   width: $width;
   height: $height;
+  box-sizing: content-box;
 }
 .camera-subscription {
   background-color: #d8d8d8;
   @extend %box;
+  &.silent {
+    border: 8px solid transparent;
+  }
+  &.speaking {
+    border: 8px solid orange;
+  }
   video {
     @extend %box;
     background-color: #d8d8d8;
@@ -72,6 +79,13 @@ $height: 240px;
 .camera-control-subscription {
   background-color: #d8d8d8;
   @extend %box;
+  &.silent {
+    border: 8px solid transparent;
+  }
+  &.speaking {
+    border: 8px solid orange;
+  }
+  
   video {
     @extend %box;
     background-color: #d8d8d8;

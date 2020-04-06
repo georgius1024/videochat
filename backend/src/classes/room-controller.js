@@ -23,9 +23,9 @@ class RoomController {
   report() {
     return {
       id: this.id,
-      participants: Object.keys(this.participants).map(key => this.participants[key].report()),
+      participants: Object.keys(this.participants).map((key) => this.participants[key].report()),
       lastActivity: moment(this.lastActivity).format('YYYY-MM-DD HH:mm:ss.SSS'),
-      fromNow: moment(this.lastActivity).fromNow()
+      fromNow: moment(this.lastActivity).fromNow(),
     }
   }
 
@@ -41,7 +41,7 @@ class RoomController {
     this.lastActivity = new Date()
     this.log(`${listenerId} connected`)
 
-    socket.on('message', data => {
+    socket.on('message', (data) => {
       this.lastActivity = new Date()
       const message = this.parseMessage(data)
       const channel = message.channel
@@ -64,12 +64,11 @@ class RoomController {
               this.broadcastRoomPublications()
               this.log(`published ${channel}`)
             })
-            .catch(error => {
+            .catch((error) => {
               delete participant.publications[channel]
               this.error(error)
               participant.sendMessage('error', error)
             })
-
           break
         case 'onIceCandidateFromPublisher':
           this.log('onIceCandidateFromPublisher')
@@ -90,7 +89,7 @@ class RoomController {
               socket.send(
                 JSON.stringify({
                   id: 'error',
-                  data: 'Wrong channel'
+                  data: 'Wrong channel',
                 })
               )
             }
@@ -106,12 +105,12 @@ class RoomController {
                 .then(() => {
                   this.log('subscribed on ' + channel)
                 })
-                .catch(error => this.error(error))
+                .catch((error) => this.error(error))
             } else {
               socket.send(
                 JSON.stringify({
                   id: 'error',
-                  data: 'Wrong channel'
+                  data: 'Wrong channel',
                 })
               )
             }
@@ -128,11 +127,15 @@ class RoomController {
             delete participant.subscriptions[channel]
           }
           break
+        case 'startedSpeaking':
+        case 'stoppedSpeaking':
+          this.broadcast(JSON.stringify(message))
+          break
         case 'ping':
         case 'pong':
           socket.send(
             JSON.stringify({
-              id: message.id === 'ping' ? 'pong' : 'ping'
+              id: message.id === 'ping' ? 'pong' : 'ping',
             })
           )
           break
@@ -140,7 +143,7 @@ class RoomController {
           socket.send(
             JSON.stringify({
               id: 'error',
-              data: 'Wrong message'
+              data: 'Wrong message',
             })
           )
           this.log('Error message')
@@ -155,7 +158,7 @@ class RoomController {
       this.broadcastRoomPublications()
     })
 
-    socket.on('error', error => {
+    socket.on('error', (error) => {
       this.lastActivity = new Date()
       this.log(`${listenerId} throws error: ${error.message} and left the room`)
       this.broadcastExitPeople(listenerId)
@@ -167,11 +170,11 @@ class RoomController {
   }
 
   sendPeoples(id) {
-    const data = Object.keys(this.participants).map(key => {
+    const data = Object.keys(this.participants).map((key) => {
       return {
         name: this.participants[key].name,
         online: true,
-        sessionId: key
+        sessionId: key,
       }
     })
     this.participants[id].sendMessage('peoples', { data })
@@ -197,7 +200,7 @@ class RoomController {
           name: participant.name,
           id: participant.id,
           role: participant.role,
-          channels
+          channels,
         }
         publishers.push(publisher)
       }

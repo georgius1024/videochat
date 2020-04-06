@@ -246,7 +246,7 @@ class CameraSubscription extends PureComponent {
       this.setState({ connected: true })
     }
     return (
-      <div className={styles['camera-subscription']}>
+      <div className={styles['camera-subscription'] + ' ' + (this.props.speaking ? styles['speaking'] : styles['silent'])}>
         {this.state.connected && this.state.initial ? (
           <div className={this.state.initial ? styles.overlay : styles.hidden}>
             <button className={styles.unmute} onClick={this.unmute}>
@@ -285,7 +285,7 @@ class CameraControlSubscription extends PureComponent {
       this.setState({ connected: true })
     }
     return (
-      <div className={styles['camera-control-subscription']}>
+      <div className={styles['camera-control-subscription'] + ' ' + (this.props.speaking ? styles['speaking'] : styles['silent'])}>
         {this.state.connected ? (
           <div className={styles['controls-panel']}>
             <div className={styles['buttons']}>
@@ -313,7 +313,8 @@ DefaultSubscription.propTypes = {
   muted: PropTypes.bool,
   volume: PropTypes.number,
   reconnect: PropTypes.number,
-  onConnected: PropTypes.func
+  onConnected: PropTypes.func,
+  speaking: PropTypes.bool
 }
 
 DefaultSubscription.defaultProps = {
@@ -321,18 +322,21 @@ DefaultSubscription.defaultProps = {
   logging: false,
   volume: 50,
   reconnect: 5000,
-  muted: true
+  muted: true,
+  speaking: false
 }
 
 CameraSubscription.propTypes = {
-  displayName: PropTypes.string.isRequired
+  displayName: PropTypes.string.isRequired,
+  speaking: PropTypes.bool
 }
 
 CameraControlSubscription.propTypes = {
   toggleAudio: PropTypes.func.isRequired,
   toggleVideo: PropTypes.func,
   audio: PropTypes.bool.isRequired,
-  video: PropTypes.bool.isRequired
+  video: PropTypes.bool.isRequired,
+  speaking: PropTypes.bool
 }
 
 export { DefaultSubscription as default, MutedSubscription, CameraSubscription, CameraControlSubscription }

@@ -66,6 +66,19 @@ class App extends Component {
           this.props.subscriptionUpdateAll(subscriptions)
         }
         break
+        case 'startedSpeaking':
+        case 'stoppedSpeaking': {
+          const subscriptions = this.props.subscriptions.map(subscription => {
+            if (message.channel === subscription.channel) {
+              return {...subscription, speaking: message.id === 'startedSpeaking'}
+            } else {
+              return subscription
+            }
+
+          }) 
+          this.props.subscriptionUpdateAll(subscriptions)
+        }
+          break
       default:
       }
     })
@@ -74,6 +87,8 @@ class App extends Component {
     this.login = this.login.bind(this)
     this.logout = this.logout.bind(this)
     this.updateUserName = this.updateUserName.bind(this)
+    this.onSpeaking = this.onSpeaking.bind(this)
+    this.onStoppedSpeaking = this.onStoppedSpeaking.bind(this)
   }
 
   componentDidMount() {
@@ -146,6 +161,14 @@ class App extends Component {
     this.setState({ modalActive: true })
   }
 
+  onSpeaking() {
+    this.socket.sendMessage('startedSpeaking', {channel: this.props.publication})
+  }
+
+  onStoppedSpeaking() {
+    this.socket.sendMessage('stoppedSpeaking', {channel: this.props.publication})
+  }
+
   myPublication() {
     if (this.props.publication) {
       return (
@@ -156,6 +179,10 @@ class App extends Component {
           logging={this.logging}
           audio={this.props.audio}
           video={this.props.video}
+          speakingThreshold={60}
+          onSpeaking={this.onSpeaking}
+          onStoppedSpeaking={this.onStoppedSpeaking}
+
         />
       )
     }
@@ -181,6 +208,7 @@ class App extends Component {
             video={this.props.video}
             toggleAudio={toggleAudio}
             toggleVideo={toggleVideo}
+            speaking={myCamera.speaking}
           />
         )
       })
@@ -197,6 +225,7 @@ class App extends Component {
             displayName={subscription.name}
             socket={this.socket}
             logging={this.logging}
+            speaking={subscription.speaking}
           />
         )
       })
